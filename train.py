@@ -11,7 +11,7 @@ from data.dataset import VisDialDataset
 from torch.utils.data import DataLoader
 from torch.optim import Adam, lr_scheduler
 
-from models.model import EncoderDecoder
+from models.encdec import EncoderDecoder
 
 # parser = argparse.ArgumentParser()
 # parser.add_argument('--config', type=str, default='configs/ls_disc_vgg16.yml', help='Configs path')
