@@ -17,7 +17,7 @@ from models.encdec import EncoderDecoder
 # parser.add_argument('--config', type=str, default='configs/ls_disc_vgg16.yml', help='Configs path')
 # args = parser.parse_known_args()
 
-config = yaml.load(open('configs/ls_disc_vgg16.yml'))
+config = yaml.load(open('configs/lf_disc_vgg16.yml'))
 return_options = True if config['model']['disc'] == 'disc' else False
 
 # Init datasets
