@@ -18,7 +18,7 @@ from models.encdec import EncoderDecoder
 # args = parser.parse_known_args()
 
 config = yaml.load(open('configs/lf_disc_vgg16.yml'))
-return_options = True if config['model']['disc'] == 'disc' else False
+return_options = True if config['model']['decoder'] == 'disc' else False
 
 # Init datasets
 trainset = VisDialDataset(config=config['dataset'],
