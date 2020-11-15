@@ -24,12 +24,14 @@ return_options = True if config['model']['decoder'] == 'disc' else False
 trainset = VisDialDataset(config=config['dataset'],
                           dialogs_jsonpath='data/visdial_1.0_train.json',
                           return_options=return_options,
-                          add_boundary_toks=True)
+                          add_boundary_toks=True,
+                          overfit=True)
 valset = VisDialDataset(config=config['dataset'],
                         dialogs_jsonpath='data/visdial_1.0_val.json',
                         dense_annotations_jsonpath='data/visdial_1.0_val_dense_annotations.json',
                         return_options=return_options,
-                        add_boundary_toks=True)
+                        add_boundary_toks=True,
+                        overfit=True)
 
 # Init data loaders
 train_loader = DataLoader(trainset,
