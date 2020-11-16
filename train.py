@@ -17,19 +17,21 @@ from models.encdec import EncoderDecoder
 # parser.add_argument('--config', type=str, default='configs/ls_disc_vgg16.yml', help='Configs path')
 # args = parser.parse_known_args()
 
-config = yaml.load(open('configs/ls_disc_vgg16.yml'))
-return_options = True if config['model']['disc'] == 'disc' else False
+config = yaml.load(open('configs/lf_disc_vgg16.yml'))
+return_options = True if config['model']['decoder'] == 'disc' else False
 
 # Init datasets
 trainset = VisDialDataset(config=config['dataset'],
                           dialogs_jsonpath='data/visdial_1.0_train.json',
                           return_options=return_options,
-                          add_boundary_toks=True)
+                          add_boundary_toks=True,
+                          overfit=True)
 valset = VisDialDataset(config=config['dataset'],
                         dialogs_jsonpath='data/visdial_1.0_val.json',
                         dense_annotations_jsonpath='data/visdial_1.0_val_dense_annotations.json',
                         return_options=return_options,
-                        add_boundary_toks=True)
+                        add_boundary_toks=True,
+                        overfit=True)
 
 # Init data loaders
 train_loader = DataLoader(trainset,
