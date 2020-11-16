@@ -4,6 +4,7 @@ import numpy as np
 # from gensim.test.utils import common_texts
 # from gensim.models import Word2Vec
 from visdialch.utils import DynamicRNN
+from visdialch.utils.util import get_pretrained_weights
 
 class DiscriminativeDecoder(nn.Module):
     def __init__(self, config, vocab):
@@ -12,7 +13,6 @@ class DiscriminativeDecoder(nn.Module):
         #self.word_embed = nn.Embedding(len(vocab),  config["word_embedding_size"], padding_idx=vocab.PAD_INDEX)
         weights = get_pretrained_weights(vocab)
         self.word_embed = nn.Embedding.from_pretrained(weights)
-
         self.option_rnn = nn.LSTM(config["word_embedding_size"], config["lstm_hidden_size"], config["lstm_num_layers"], 
                             batch_first=True, dropout=config["dropout"])
 
@@ -43,31 +43,3 @@ class DiscriminativeDecoder(nn.Module):
         output_scores = torch.sum(opt_emb * encoder_output, 1)
         output_scores = output_scores.reshape(batch_size, num_rounds, num_options)
         return output_scores
-
-
-def loadGloveModel(File):
-    print("Loading Glove Model")
-    f = open(File,'r')
-    gloveModel = {}
-    for line in f:
-        splitLines = line.split()
-        word = splitLines[0]
-        wordEmbedding = np.array([float(value) for value in splitLines[1:]])
-        gloveModel[word] = wordEmbedding
-    print(len(gloveModel)," words loaded!")
-    return gloveModel
-
-def get_pretrained_weights(vocab):
-    word_vectors = loadGloveModel('./data/glove.6B.50d.txt')
-    #print("Vocab:", vocab.word2index, "len", len(vocab))
-    matrix_len = len(vocab)
-    weights = np.zeros((matrix_len, 50))
-
-    for i, word in enumerate(vocab.word2index):
-        try:
-            weights[i] = word_vectors[word]
-        except:
-            weights[i] = np.random.normal(scale = 0.6, size = (50,))
-
-    weights = torch.tensor(weights)
-    return weights
