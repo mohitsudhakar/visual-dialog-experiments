@@ -1,4 +1,4 @@
-from visdialch.decoders.gen import GenerativeDecoder
+# from visdialch.decoders.gen import GenerativeDecoder
 #from visdialch.decoders.disc import DiscriminativeDecoder
 from visdialch.decoders.decoder import DiscriminativeDecoder
 

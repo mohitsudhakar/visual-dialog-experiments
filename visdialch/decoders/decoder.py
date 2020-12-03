@@ -10,9 +10,11 @@ class DiscriminativeDecoder(nn.Module):
     def __init__(self, config, vocab):
         super().__init__()
         self.config = config 
-        #self.word_embed = nn.Embedding(len(vocab),  config["word_embedding_size"], padding_idx=vocab.PAD_INDEX)
+        # Getting pretrained weights
         weights = get_pretrained_weights(vocab)
         self.word_embed = nn.Embedding.from_pretrained(weights)
+
+        # Discriminative decoder generates scores for each option
         self.option_rnn = nn.LSTM(config["word_embedding_size"], config["lstm_hidden_size"], config["lstm_num_layers"], 
                             batch_first=True, dropout=config["dropout"])
 
@@ -25,9 +27,11 @@ class DiscriminativeDecoder(nn.Module):
         # (batch_size*num_rounds*num_options) x max_seq_length
         opt = opt.reshape(-1, opt.shape[-1])
         # (batch_size*num_rounds*num_options) x max_seq_length x embedding_size
+
+        # Initally finding the word encoding for the options
         opt_emb = self.word_embed(opt)
 
-        # Running the Decoder rnn on opt_emb to remove max_deq_len dimension
+        # Running the Decoder rnn on opt_emb to remove max_seq_len dimension
         # (batch_size*num_rounds*num_options) x lstm_hidden_size
         _, (opt_emb, _) = self.option_rnn(opt_emb, batch["opt_len"])
 
@@ -35,11 +39,11 @@ class DiscriminativeDecoder(nn.Module):
         # batch_size x num_rounds x num_options x lstm_hidden_size
         encoder_output = encoder_output.unsqueeze(2).repeat(1,1, num_options, 1)
 
-        # Get the dot product opt_emb & encoder_output
+        # Get the product opt_emb & encoder_output
         # (batch_size*num_rounds*num_options) x lstm_hidden_size
         encoder_output = encoder_output.reshape(-1, self.config["lstm_hidden_size"])
-        #print("encoder_output:", encoder_output.shape)
-        #print("opt_emb:", opt_emb.shape)
         output_scores = torch.sum(opt_emb * encoder_output, 1)
+
+        # Finally reshaping to seperate score for each options
         output_scores = output_scores.reshape(batch_size, num_rounds, num_options)
         return output_scores

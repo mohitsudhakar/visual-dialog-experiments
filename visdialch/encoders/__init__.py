@@ -1,4 +1,4 @@
-from visdialch.encoders.lf3 import LateFusionEncoder
+from visdialch.encoders.lf_image_and_history import LateFusionEncoder
 
 
 def Encoder(model_config, *args):
