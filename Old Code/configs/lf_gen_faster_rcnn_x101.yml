@@ -14,18 +14,18 @@ dataset:
 # Model related arguments
 model:
   encoder: 'lf'
-  decoder: 'disc'
+  decoder: 'gen'
 
   img_feature_size: 2048
   word_embedding_size: 300
   lstm_hidden_size: 512
   lstm_num_layers: 2
-  dropout: 0.5
+  dropout: 0.2
 
 
 # Optimization related arguments
 solver:
-  batch_size: 48 # 32 x num_gpus is a good rule of thumb
+  batch_size: 224 # 56 x num_gpus is a good rule of thumb
   num_epochs: 20
   initial_lr: 0.01
   training_splits: "train"  # "trainval"
